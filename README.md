@@ -1,309 +1,303 @@
-# Microsoft Sentinel SOC Investigation Lab
+# Microsoft Sentinel Incident Management Lab
 
-## Incident Management & Threat Hunting Case Study
-
----
-
-## Project Overview
-
-This project simulates the real-world workflow of a Security Operations Center (SOC) Analyst using Microsoft Sentinel to investigate, triage, enrich, and respond to security incidents.
-
-The objective was to practice incident ownership, investigation, threat hunting, automation, and incident documentation following SOC operational procedures.
+## SOC Investigation Case Study
 
 ---
 
-## Objectives
+## Overview
 
-* Investigate security incidents using Microsoft Sentinel
-* Perform log analysis and incident enrichment
-* Conduct threat hunting using KQL queries
-* Identify affected assets and Indicators of Compromise (IOC)
-* Apply incident response and documentation procedures
-* Simulate SOC handover to another operational team
+This lab simulates the daily workflow of a Security Operations Center (SOC) Analyst using Microsoft Sentinel incident management capabilities.
 
----
+The exercise focuses on how analysts review incidents, investigate alerts, enrich evidence, perform threat hunting, and prepare incidents for response or handover.
 
-## Tools and Technologies
-
-* Microsoft Sentinel (SIEM)
-* Log Analytics Workspace
-* Kusto Query Language (KQL)
-* Sentinel Workbooks
-* Automation Rules and Playbooks
-* Threat Intelligence Management
-* Cisco Umbrella DNS Logs (ASIM normalized)
+Estimated completion time: 60 minutes
+Level: Intermediate (Level 300)
 
 ---
 
-## Scenario 1 — Suspicious Sign-ins to Disabled Accounts
+## Prerequisites
 
-### Incident
-
-Alert: Sign-ins from IPs attempting authentication to disabled accounts
+This lab assumes that Sentinel data connectors, analytics rules, and sample datasets were already deployed in a previous module.
 
 ---
 
-### Step 1: Incident Triage
+# Exercise 1 — Reviewing Microsoft Sentinel Incident Tools
 
-* Navigated to Microsoft Sentinel Incidents page
-* Reviewed incident severity and associated entities
-* Assigned incident ownership
-* Updated status from New to Active
+## Task: Accessing the Incident Queue
 
-SOC Practice:
+### Action Performed
 
-* Ensures investigation accountability
-* Prevents duplicate analyst effort
+* Opened Microsoft Sentinel workspace
+* Navigated to the **Incidents** page
+* Reviewed incidents generated within the default 24-hour window
 
-![Incident Triage](screenshots/step1-incident-triage.png)
+Analysts used filtering options to:
 
-*Figure 1 — Reviewing incidents and assigning ownership in Microsoft Sentinel*
+* Modify investigation time range
+* View incidents by severity
+* Include Closed, Active, or New incidents
 
-#### Analyst Thought Process
+### Purpose
 
-The initial objective was to determine whether the alert represented malicious activity or normal operational behaviour. Assigning ownership ensured responsibility for investigation, while updating the status to Active indicated that triage procedures had formally begun within the SOC workflow.
-
----
-
-### Step 2: Log Investigation
-
-* Accessed alert events through Log Analytics
-* Reviewed authentication activity including:
-
-  * Source IP address
-  * Targeted user accounts
-  * Login outcomes
-  * Timestamp patterns
-
-Observed repeated authentication attempts originating from an external IP address.
-
-![Log Investigation](screenshots/step2-log-analysis.png)
-
-*Figure 2 — Authentication log analysis performed in Log Analytics*
-
-#### Analyst Thought Process
-
-Repeated login attempts against disabled accounts may indicate password spraying or credential abuse attempts. Log analysis was performed to validate attack patterns and determine whether activity appeared automated or user-driven.
+The Incidents page acts as the primary working queue for SOC analysts. Filtering helps analysts prioritise alerts based on urgency and investigation scope.
 
 ---
 
-### Step 3: Incident Enrichment
+## Task: Reviewing Incident Details
 
-Executed Sentinel playbook:
+### Action Performed
 
-Get-GeoFromIpAndTagIncident
+* Located incident titled
+  **“Sign-ins from IPs that attempt sign-ins to disabled accounts”**
+* Opened incident preview panel
+* Reviewed surfaced entities and alert summary
 
-Actions performed:
+### Purpose
 
+Initial review provides high-level understanding of:
+
+* affected users
+* source IP addresses
+* detection reason
+
+This allows analysts to quickly assess potential risk before deeper investigation.
+
+---
+
+## Task: Incident Ownership Assignment
+
+### Action Performed
+
+* Changed Owner from **Unassigned** to **Assign to me**
+* Updated incident Status from **New** to **Active**
+
+### Purpose
+
+Assigning ownership ensures accountability and prevents multiple analysts from duplicating investigation work. Changing status to Active confirms investigation has officially started.
+
+---
+
+## Task: Reviewing SOC Operational Metrics
+
+### Action Performed
+
+Opened **Security Operations Efficiency Workbook** through:
+
+* Incident action bar, or
+* Direct link within the incident view
+
+Reviewed:
+
+* Incident statistics
+* Investigation lifecycle metrics
+* SOC performance overview
+
+### Purpose
+
+The workbook provides visibility into overall SOC health, including investigation workload and response efficiency. Analysts use this information to understand operational trends and incident handling performance.
+
+---
+
+# Exercise 2 — Handling Incident: Suspicious Sign-ins to Disabled Accounts
+
+---
+
+## Task 1: Initial Incident Investigation
+
+### Action Performed
+
+* Opened incident from Incidents dashboard
+* Reviewed entities displayed in preview pane
+* Confirmed ownership and Active status
+* Selected **View full details**
+
+### Purpose
+
+Full incident view allows analysts to access alerts, timelines, and investigation evidence required for validation.
+
+---
+
+## Task 2: Reviewing Raw Alert Events
+
+### Action Performed
+
+* Expanded alerts within Incident Timeline
+* Opened **Link to Log Analytics**
+* Examined authentication event data
+
+Reviewed fields included:
+
+* Source IP address
+* Target accounts
+* Authentication results
+* Event timestamps
+
+### Purpose
+
+Raw log analysis helps determine whether activity matches known attack techniques such as password spraying or unauthorized access attempts.
+
+---
+
+## Task 3: Incident Enrichment Using Playbook
+
+### Action Performed
+
+* Executed playbook:
+  **Get-GeoFromIpAndTagIncident**
 * Retrieved geographic intelligence
-* Tagged incident automatically
-* Added contextual investigation data
+* Added tags and contextual data to incident
 
-Result: Suspicious IP traced to North Korea.
+### Purpose
 
-![Playbook Execution](screenshots/step3-playbook.png)
-
-*Figure 3 — Geo-IP enrichment playbook execution*
-
-#### Analyst Thought Process
-
-IP enrichment provides contextual intelligence that assists in risk evaluation. Activity originating from an unexpected geographic region increased the initial threat assessment and justified further investigation.
+Enrichment adds external intelligence to investigation data. Geographic information assists analysts in determining whether login activity originates from expected locations.
 
 ---
 
-### Step 4: Investigation Using Workbook
+## Task 4: Investigation Using Workbook
 
-Used Investigation Insights Workbook to pivot analysis based on the suspicious IP address.
+### Action Performed
 
-Findings:
+* Opened **Investigation Insights Workbook**
+* Verified subscription and workspace selection
+* Switched investigation type to **Entity**
+* Investigated IP address: 175.45.176.99
 
-* Multiple successful logins identified
+Workbook analysis revealed:
+
+* Successful logins associated with user Adele
 * Failed authentication attempts against disabled accounts
-* Activity correlated across several timestamps
 
-User validation confirmed activity was part of an authorised internal Red Team exercise.
+User validation confirmed activity belonged to an internal Red Team exercise.
 
-![Workbook Investigation](screenshots/step4-workbook.png)
+### Purpose
 
-*Figure 4 — Investigation Insights workbook analysis*
-
-#### Analyst Thought Process
-
-Workbook analysis enabled correlation across multiple data sources to determine whether broader compromise existed. Behaviour patterns aligned with controlled testing rather than adversarial activity.
+Workbook investigation enables correlation across multiple log sources to determine whether behaviour represents compromise or authorised activity.
 
 ---
 
-### Step 5: Response Action
+## Task 5: Creating Automation Rule
 
-* Created automation rule
-* Allow-listed authorised Red Team IP
-* Configured rule expiration for 48 hours
+### Action Performed
 
-![Automation Rule](screenshots/step5-automation-rule.png)
+* Created Incident Automation Rule
+* Allow-listed Red Team IP address
+* Configured expiration period of 48 hours
 
-*Figure 5 — Automation rule configuration*
+### Purpose
 
-#### Analyst Thought Process
-
-Since the activity was verified as authorised testing, automation was implemented to suppress repeated alerts. This reduces analyst workload while preserving detection capability after testing concludes.
+Automation rules reduce unnecessary alert generation during authorised testing activities while maintaining detection capability after testing ends.
 
 ---
 
-### Step 6: Incident Closure
+## Task 6: Incident Closure
 
-Incident classified as Benign – Authorised Security Testing.
+### Action Performed
 
-Status updated from Active to Closed.
+* Updated incident status from Active to Closed
+* Classified incident as **Benign**
 
-![Incident Closure](screenshots/step6-closure.png)
+### Purpose
 
-*Figure 6 — Incident closure in Microsoft Sentinel*
-
-#### Analyst Thought Process
-
-Proper incident closure ensures audit traceability and provides historical reference for similar alerts. Documentation confirms that investigation actions were completed and validated.
+Proper classification ensures accurate reporting, audit tracking, and prevents future re-investigation of validated authorised activity.
 
 ---
 
-## Scenario 2 — Solorigate Network Beacon Investigation
-
-### Incident
-
-Detection of domain IOC associated with the SolarWinds Solorigate campaign.
-
-Domain identified: avsvmcloud.com
+# Exercise 3 — Handling Incident: Solorigate Network Beacon
 
 ---
 
-### Step 1: Incident Ownership
+## Task 7: Incident Review and Ownership
 
+### Action Performed
+
+* Located **Solorigate Network Beacon** incident
 * Assigned incident ownership
-* Reviewed DNS telemetry normalized using ASIM
+* Reviewed detection description
 
-![Solorigate Incident](screenshots/step7-solorigate-incident.png)
+Domain IOC identified:
+avsvmcloud.com
 
-*Figure 7 — Solorigate incident overview*
+### Purpose
 
-#### Analyst Thought Process
-
-Given the association with a known supply-chain attack, the incident required immediate validation to determine potential organisational exposure.
-
----
-
-### Step 2: Threat Hunting
-
-Executed hunting query: Solorigate Inventory Check
-
-Purpose:
-Identify hosts containing malicious DLL indicators.
-
-Results:
-
-* Three potentially affected endpoints discovered
-* Evidence bookmarked for investigation tracking
-
-![Threat Hunting](screenshots/step8-hunting-query.png)
-
-*Figure 8 — Threat hunting query results*
-
-#### Analyst Thought Process
-
-Threat hunting was conducted to determine whether compromise extended beyond the initially detected system and to assess the overall scope of impact.
+Incidents linked to known threat campaigns require immediate validation due to potential organisational exposure.
 
 ---
 
-### Step 3: Evidence Correlation
+## Task 8: Reviewing Detection Source
 
-* Added bookmarks to incident
-* Expanded affected asset visibility
-* Identified additional impacted hosts
+### Action Performed
 
-![Bookmarks](screenshots/step9-bookmarks.png)
+* Inspected alert timeline
+* Opened raw logs via Log Analytics
+* Confirmed events originated from Cisco Umbrella DNS logs normalized using ASIM
 
-*Figure 9 — Bookmarking investigation evidence*
+### Purpose
 
-#### Analyst Thought Process
-
-Centralising investigation evidence improves visibility and supports coordinated containment decisions across affected systems.
+Understanding telemetry source helps analysts validate detection reliability and understand how data was normalized across security tools.
 
 ---
 
-### Step 4: Containment Recommendation
+## Task 9: Threat Hunting for Additional Evidence
 
-Recommended actions:
+### Action Performed
 
-* Endpoint isolation
-* Further forensic investigation
+* Opened Hunting blade
+* Executed query: **Solorigate Inventory Check**
+* Viewed query results
 
-![Affected Hosts](screenshots/step10-entities.png)
+Results identified three potentially affected endpoints.
 
-*Figure 10 — Identified affected endpoints*
+### Purpose
 
-#### Analyst Thought Process
-
-Indicators suggested potential host compromise. Isolation was recommended to prevent lateral movement or command-and-control communication while forensic analysis proceeds.
-
----
-
-### Step 5: Threat Intelligence Integration
-
-Added malicious IP address to Sentinel Threat Intelligence repository.
-
-Configuration:
-
-* Indicator Type: IP Address
-* Validity Period: 60 days
-
-![Threat Intelligence](screenshots/step11-threat-intel.png)
-
-*Figure 11 — IOC added to Threat Intelligence store*
-
-#### Analyst Thought Process
-
-Adding indicators to Threat Intelligence enables automatic correlation with future telemetry, strengthening detection capability across the environment.
+Threat hunting expands investigation scope beyond the original alert to identify additional compromised systems.
 
 ---
 
-### Step 6: Incident Documentation and Handover
+## Task 10: Evidence Bookmarking and Correlation
 
-Documented:
+### Action Performed
 
-* Investigation steps
-* Hunting outcomes
-* Affected assets
-* Recommended response actions
+* Bookmarked identified hosts
+* Added bookmarks to existing Solorigate incident
 
-Incident prepared for escalation to Incident Response or Digital Forensics teams.
+### Purpose
 
-![Incident Documentation](screenshots/step12-comments.png)
-
-*Figure 12 — Investigation documentation and handover notes*
-
-#### Analyst Thought Process
-
-Thorough documentation ensures continuity when incidents transition between SOC tiers or specialised response teams.
+Centralising evidence within a single incident improves visibility and supports coordinated response planning.
 
 ---
 
-## SOC Skills Demonstrated
+## Task 11: Containment Recommendation
 
-* Incident triage and ownership
-* Log analysis
-* Threat hunting
-* IOC management
-* Security automation
-* Incident documentation
-* Cross-team handover procedures
-* SIEM investigation workflow
+### Action Performed
 
----
+Recommended isolation of affected hosts by Operations team.
 
-## Key Learning Outcomes
+### Purpose
 
-This lab strengthened practical SOC analyst capabilities including structured investigation methodology, evidence-based decision making, enrichment usage, and realistic SOC operational workflow.
+Host isolation prevents possible attacker communication, lateral movement, or persistence while further investigation occurs.
 
 ---
 
-## Conclusion
+## Task 12: Adding Indicator to Threat Intelligence
 
-This project demonstrates hands-on experience performing end-to-end incident investigation using Microsoft Sentinel, reflecting enterprise SOC operations including detection validation, threat hunting, response coordination, and incident closure.
+### Action Performed
+
+* Copied malicious IP address from incident
+* Added new indicator in Sentinel Threat Intelligence
+* Configured validity period of two months
+
+### Purpose
+
+Adding Indicators of Compromise enables automatic detection correlation if the threat reappears within organisational telemetry.
+
+---
+
+## Task 13: Incident Documentation and Handover
+
+### Action Performed
+
+* Documented investigation activities in Incident Comments
+* Prepared incident for transfer to Operations or Forensics teams
+* Shared incident link or reassigned ownership
+
+### Purpose
