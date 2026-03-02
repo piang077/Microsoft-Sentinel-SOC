@@ -17,7 +17,7 @@ Level: Intermediate (Level 300)
 
 ## Prerequisites
 
-This lab assumes that Sentinel data connectors, analytics rules, and sample datasets were already deployed in a previous module.
+This lab assumes that Sentinel data connectors, analytics rules, and sample datasets were already deployed in a previous lab.
 
 ---
 
@@ -301,3 +301,24 @@ Adding Indicators of Compromise enables automatic detection correlation if the t
 * Shared incident link or reassigned ownership
 
 ### Purpose
+
+Clear documentation ensures investigation continuity and enables downstream teams to proceed with response or forensic analysis efficiently.
+
+---
+
+## Skills Demonstrated
+
+* Incident triage and ownership
+* Log investigation
+* Incident enrichment
+* Threat hunting
+* Evidence correlation
+* Automation rule configuration
+* Threat intelligence management
+* Incident documentation and handover
+
+---
+
+## Conclusion
+
+This case study demonstrates practical SOC analyst experience using Microsoft Sentinel to manage incidents from initial detection through investigation, validation, response recommendation, and operational handover. The workflow reflects real enterprise SOC investigation procedures and incident lifecycle management.
