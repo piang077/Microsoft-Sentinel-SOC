@@ -45,7 +45,7 @@ The objective was to practice incident ownership, investigation, threat hunting,
 
 ### Step 1: Incident Triage
 
-* Navigated to Sentinel **Incidents Dashboard**
+* Navigated to Sentinel **Incidents**
 * Reviewed incident severity and entities involved
 * Assigned incident ownership
 * Changed status from **New → Active**
@@ -54,6 +54,10 @@ SOC Practice:
 
 * Ensures accountability
 * Prevents duplicate investigations
+
+![Incident Triage](screenshots/step1-incident-triage.png)
+
+*Figure 1 — Reviewing incidents and assigning ownership in Microsoft Sentinel*
 
 ---
 
