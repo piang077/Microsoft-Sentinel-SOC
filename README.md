@@ -1,6 +1,6 @@
 # Microsoft Sentinel Incident Management Lab
 
-## SOC Investigation Case Study
+## SOC Investigation 
 
 ---
 
